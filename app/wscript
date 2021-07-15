@@ -1,0 +1,6 @@
+def build(bld):
+    bld(name='app/revision', rule='sleep 5; echo "#define REVISION \\"`git rev-parse HEAD`\\"" > ${TGT}',
+        target=bld.path.get_bld().make_node('revision.hpp'),
+        always=True)
+    bld(features='cxx', source='empty.cpp', name='app/empty', use=['app/revision'])
+    bld(features='cxx cxxprogram', source='test.cpp', name='test', target='test', use=['lib/empty', 'app/empty'])
